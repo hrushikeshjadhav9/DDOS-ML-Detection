@@ -1,3 +1,4 @@
+%%writefile ddos-detect.py
 import os
 
 import arff
@@ -6,14 +7,13 @@ from matplotlib import pyplot as plt
 from keras.layers import Dense, Dropout
 from keras.models import Sequential
 from keras.models import load_model
+from keras.models import model_from_json
 from keras.callbacks import TensorBoard
 from keras.utils import to_categorical
 from keras.utils import plot_model
 
 # set the directory of the dataset
-# file = open("data/final-dataset.arff", 'r')
 file = open("../../final-dataset.arff", 'r')
-# file = arff.load(file)
 
 # # Togglable Options
 # regenerate_model = False
@@ -107,9 +107,30 @@ loss_history = history.history["loss"]
 numpy_loss_history = np.array(loss_history)
 np.savetxt("saved-files/loss_history.txt", numpy_loss_history, delimiter=",")
 
+# model = load_model('saved-files/model.h5')
+
+
+# serialize model to JSON
+model_json = model.to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+# serialize weights to HDF5
 model.save_weights("model.h5")
-print("Saved model as model.h5")
-model = load_model('model.h5')
+print("Saved model to disk")
+
+
+# load json and create model
+json_file = open('model.json', 'r')
+loaded_model_json = json_file.read()
+json_file.close()
+model = model_from_json(loaded_model_json)
+# load weights into new model
+model.load_weights("model.h5")
+print("Loaded model from disk")
+
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+
 
 # evaluating the model's performace
 print(model.evaluate(data_eval, label_eval))
@@ -123,7 +144,7 @@ plt.figure(1)
 # summarize history for accuracy
 plt.subplot(211)
 plt.plot(history.history['accuracy'])
-plt.plot(history.history['val_acc'])
+plt.plot(history.history['val_accuracy'])
 plt.title('model accuracy')
 plt.ylabel('accuracy')
 plt.xlabel('epoch')
