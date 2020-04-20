@@ -106,7 +106,9 @@ loss_history = history.history["loss"]
 numpy_loss_history = np.array(loss_history)
 np.savetxt("saved-files/loss_history.txt", numpy_loss_history, delimiter=",")
 
-# model = load_model('saved-files/model.h5')
+model.save_weights("model.h5")
+print("Saved model as model.h5")
+model = load_model('model.h5')
 
 # evaluating the model's performace
 print(model.evaluate(data_eval, label_eval))
@@ -119,7 +121,7 @@ plt.figure(1)
 
 # summarize history for accuracy
 plt.subplot(211)
-plt.plot(history.history['acc'])
+plt.plot(history.history['accuracy'])
 plt.plot(history.history['val_acc'])
 plt.title('model accuracy')
 plt.ylabel('accuracy')
