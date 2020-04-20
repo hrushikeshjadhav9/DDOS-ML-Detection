@@ -1,4 +1,3 @@
-%%writefile ddos-detect.py
 import os
 
 import arff
