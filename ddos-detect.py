@@ -12,7 +12,7 @@ from keras.utils import plot_model
 
 # set the directory of the dataset
 file = open("data/final-dataset.arff", 'r')
-file = arff.load(file)
+# file = arff.load(file)
 
 # # Togglable Options
 # regenerate_model = False
@@ -106,7 +106,7 @@ loss_history = history.history["loss"]
 numpy_loss_history = np.array(loss_history)
 np.savetxt("saved-files/loss_history.txt", numpy_loss_history, delimiter=",")
 
-model = load_model('saved-files/model.h5')
+# model = load_model('saved-files/model.h5')
 
 # evaluating the model's performace
 print(model.evaluate(data_eval, label_eval))
