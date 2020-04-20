@@ -12,6 +12,7 @@ from keras.utils import plot_model
 
 # set the directory of the dataset
 file = open("data/final-dataset.arff", 'r')
+file = arff.load(file)
 
 # # Togglable Options
 # regenerate_model = False
